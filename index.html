@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comandos npm no VS Code</title>
+    <title>Guia de npm, Git e tags HTML</title>
     <style>
         :root {
             --bg: #0f172a;
@@ -13,9 +13,10 @@
             --card-strong: rgba(17, 24, 39, 0.9);
             --text: #e5eefb;
             --muted: #c7d2fe;
-            --primary: #7c3aed;
+            --primary: #f0abfc;
             --secondary: #22c55e;
             --accent: #38bdf8;
+            --warm: #fbbf24;
             --border: rgba(148, 163, 184, 0.2);
             --code-bg: #020817;
             --code-text: #e2e8f0;
@@ -26,18 +27,207 @@
             box-sizing: border-box;
         }
 
+        [hidden] {
+            display: none !important;
+        }
+
         body {
             margin: 0;
             font-family: "Segoe UI", Arial, sans-serif;
             background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 38%, var(--bg-2) 100%);
             color: var(--text);
             line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .black-hole-scene {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .black-hole-scene::before {
+            position: absolute;
+            inset: -20%;
+            content: "";
+            opacity: 0.55;
+            background-image: radial-gradient(1px 1px at 12% 18%, #fff 99%, transparent),
+                radial-gradient(2px 2px at 42% 73%, #bae6fd 99%, transparent),
+                radial-gradient(1px 1px at 78% 28%, #fff 99%, transparent),
+                radial-gradient(1px 1px at 88% 82%, #fbbf24 99%, transparent),
+                radial-gradient(2px 2px at 26% 91%, #7dd3fc 99%, transparent);
+            background-size: 370px 310px;
+            animation: stars-drift 36s linear infinite;
+        }
+
+        .black-hole {
+            position: absolute;
+            top: 44%;
+            left: 77%;
+            width: 160px;
+            aspect-ratio: 1;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, #000 0 36%, rgba(2, 6, 23, 0.96) 48%, transparent 70%);
+            box-shadow: 0 0 50px 18px rgba(249, 115, 22, 0.12), 0 0 100px 30px rgba(56, 189, 248, 0.08);
+            animation: hole-pulse 4s ease-in-out infinite;
+        }
+
+        .black-hole::before {
+            position: absolute;
+            inset: -48px;
+            content: "";
+            border-radius: 50%;
+            background: radial-gradient(circle, transparent 40%, rgba(251, 146, 60, 0.12) 56%, transparent 72%);
+            animation: halo-pulse 3s ease-in-out infinite alternate;
+        }
+
+        .accretion-disk {
+            position: absolute;
+            top: 44%;
+            left: 77%;
+            width: 330px;
+            height: 105px;
+            border: 3px solid rgba(251, 146, 60, 0.76);
+            border-left-color: rgba(56, 189, 248, 0.8);
+            border-right-color: rgba(251, 191, 36, 0.9);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(251, 146, 60, 0.75), inset 0 0 14px rgba(56, 189, 248, 0.5);
+            transform: translate(-50%, -50%) rotate(-22deg);
+            animation: disk-spin 9s linear infinite;
+        }
+
+        .orbit {
+            position: absolute;
+            top: 44%;
+            left: 77%;
+            width: 420px;
+            height: 170px;
+            border: 1px solid rgba(125, 211, 252, 0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) rotate(-22deg);
+            animation: orbit-spin 16s linear infinite;
+        }
+
+        .orbit::before {
+            position: absolute;
+            top: 50%;
+            left: -5px;
+            width: 10px;
+            height: 10px;
+            content: "";
+            border-radius: 50%;
+            background: #bae6fd;
+            box-shadow: 0 0 12px 4px rgba(56, 189, 248, 0.8);
+        }
+
+        .orbit::after {
+            position: absolute;
+            top: 50%;
+            right: -3px;
+            width: 6px;
+            height: 6px;
+            content: "";
+            border-radius: 50%;
+            background: #fdba74;
+            box-shadow: 0 0 10px 3px rgba(249, 115, 22, 0.8);
+        }
+
+        .inner-orbit {
+            position: absolute;
+            top: 44%;
+            left: 77%;
+            width: 255px;
+            height: 92px;
+            border: 1px solid rgba(251, 191, 36, 0.24);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) rotate(28deg);
+            animation: inner-orbit-spin 7s linear infinite;
+        }
+
+        .inner-orbit::before {
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            content: "";
+            border-radius: 50%;
+            background: #fde68a;
+            box-shadow: 0 0 12px 4px rgba(251, 191, 36, 0.75);
+        }
+
+        @keyframes disk-spin {
+            to {
+                transform: translate(-50%, -50%) rotate(338deg);
+            }
+        }
+
+        @keyframes orbit-spin {
+            to {
+                transform: translate(-50%, -50%) rotate(338deg);
+            }
+        }
+
+        @keyframes inner-orbit-spin {
+            to {
+                transform: translate(-50%, -50%) rotate(388deg);
+            }
+        }
+
+        @keyframes stars-drift {
+            to {
+                background-position: 370px 310px;
+            }
+        }
+
+        @keyframes hole-pulse {
+            50% {
+                box-shadow: 0 0 68px 24px rgba(249, 115, 22, 0.2), 0 0 125px 38px rgba(56, 189, 248, 0.13);
+            }
+        }
+
+        @keyframes halo-pulse {
+            to {
+                opacity: 0.35;
+                transform: scale(1.12);
+            }
+        }
+
+        @keyframes content-arrive {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .black-hole-scene::before,
+            .black-hole,
+            .black-hole::before,
+            .accretion-disk,
+            .orbit,
+            .inner-orbit,
+            .card,
+            .card>section {
+                animation: none;
+            }
         }
 
         .container {
             max-width: 1000px;
             margin: 50px auto;
             padding: 24px;
+            position: relative;
+            z-index: 1;
         }
 
         .card {
@@ -47,13 +237,39 @@
             box-shadow: 0 18px 45px var(--shadow);
             padding: 32px;
             backdrop-filter: blur(10px);
+            animation: content-arrive 700ms ease-out both;
+        }
+
+        .card>section {
+            animation: content-arrive 700ms ease-out both;
+        }
+
+        .card>section:nth-of-type(1) {
+            animation-delay: 100ms;
+        }
+
+        .card>section:nth-of-type(2) {
+            animation-delay: 180ms;
+        }
+
+        .card>section:nth-of-type(3) {
+            animation-delay: 260ms;
+        }
+
+        .card>section:nth-of-type(4) {
+            animation-delay: 340ms;
+        }
+
+        .card>section>section {
+            animation: none;
         }
 
         .badge {
             display: inline-block;
-            background: rgba(124, 58, 237, 0.18);
-            color: #ddd6fe;
-            border: 1px solid rgba(168, 85, 247, 0.35);
+            background: rgba(56, 189, 248, 0.1);
+            color: #a5f3fc;
+            border: 1px solid rgba(56, 189, 248, 0.55);
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.14), inset 0 0 12px rgba(56, 189, 248, 0.08);
             border-radius: 999px;
             padding: 8px 14px;
             font-size: 0.8rem;
@@ -66,6 +282,7 @@
             margin: 0 0 18px;
             font-size: clamp(2rem, 4vw, 3rem);
             color: #f8fafc;
+            text-shadow: 0 0 24px rgba(56, 189, 248, 0.3);
         }
 
         h2 {
@@ -73,6 +290,7 @@
             margin-bottom: 12px;
             color: #f8fafc;
             font-size: 1.4rem;
+            text-shadow: 0 0 16px rgba(240, 171, 252, 0.32);
         }
 
         p {
@@ -88,17 +306,179 @@
             border-radius: 14px;
         }
 
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 22px 0 26px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+            padding: 0 14px;
+            border: 1px solid rgba(56, 189, 248, 0.42);
+            border-radius: 10px;
+            background: rgba(2, 8, 23, 0.72);
+            box-shadow: inset 0 0 16px rgba(56, 189, 248, 0.06);
+            color: var(--accent);
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14), 0 0 24px rgba(56, 189, 248, 0.15);
+        }
+
+        .search-icon {
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        #command-search {
+            width: 100%;
+            min-width: 0;
+            padding: 14px 0;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: var(--text);
+            font: inherit;
+        }
+
+        #command-search::placeholder {
+            color: #94a3b8;
+        }
+
+        .command-count {
+            flex: none;
+            color: #a5f3fc;
+            font-size: 0.9rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .command-wrap {
+            position: relative;
+            margin-top: 10px;
+        }
+
         .command {
             display: block;
             background: var(--code-bg);
             color: var(--code-text);
             border-left: 4px solid var(--accent);
             border-radius: 10px;
-            padding: 14px 16px;
-            margin-top: 10px;
+            padding: 14px 104px 14px 16px;
             white-space: pre-wrap;
             font-family: Consolas, "Courier New", monospace;
             box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.15);
+            overflow-wrap: anywhere;
+        }
+
+        .command-important {
+            border-left-color: var(--primary);
+            box-shadow: inset 0 0 0 1px rgba(240, 171, 252, 0.18), 0 0 18px rgba(240, 171, 252, 0.1);
+        }
+
+        .tag-preview {
+            margin-top: 10px;
+        }
+
+        .tag-preview-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #a5f3fc;
+            font-size: 0.78rem;
+        }
+
+        .tag-preview-frame {
+            display: block;
+            width: 100%;
+            height: 112px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 8px;
+            background: #fff;
+            pointer-events: none;
+        }
+
+        .tag-preview-note {
+            padding: 10px 12px;
+            border-left: 3px solid var(--warm);
+            border-radius: 4px;
+            background: rgba(251, 191, 36, 0.08);
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 50%;
+            right: 9px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 34px;
+            padding: 0 9px;
+            transform: translateY(-50%);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 7px;
+            background: rgba(15, 23, 42, 0.95);
+            color: #bae6fd;
+            font: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        .copy-button:hover,
+        .copy-button:focus-visible {
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+            outline: none;
+        }
+
+        .copy-icon {
+            font-size: 1rem;
+        }
+
+        .copy-button.is-copied {
+            border-color: var(--secondary);
+            color: #86efac;
+            box-shadow: 0 0 14px rgba(34, 197, 94, 0.25);
+        }
+
+        .empty-state {
+            padding: 28px 16px;
+            border: 1px dashed rgba(251, 191, 36, 0.45);
+            border-radius: 10px;
+            color: #fde68a;
+            text-align: center;
+        }
+
+        .toast {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 5;
+            padding: 12px 18px;
+            border: 1px solid rgba(34, 197, 94, 0.65);
+            border-radius: 9px;
+            background: rgba(2, 8, 23, 0.96);
+            color: #bbf7d0;
+            box-shadow: 0 0 24px rgba(34, 197, 94, 0.2);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 180ms ease, transform 180ms ease;
+            pointer-events: none;
+        }
+
+        .toast.is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         ul {
@@ -114,21 +494,78 @@
         strong {
             color: #f8fafc;
         }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 16px auto;
+                padding: 12px;
+            }
+
+            .card {
+                padding: 20px 16px;
+            }
+
+            .toolbar {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .command-count {
+                align-self: flex-end;
+            }
+
+            .command {
+                padding: 52px 12px 12px;
+            }
+
+            .copy-button {
+                top: 8px;
+                right: 8px;
+                transform: none;
+            }
+
+            .toast {
+                right: 12px;
+                bottom: 12px;
+                left: 12px;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div class="black-hole-scene" aria-hidden="true">
+        <div class="orbit"></div>
+        <div class="inner-orbit"></div>
+        <div class="accretion-disk"></div>
+        <div class="black-hole"></div>
+    </div>
     <main class="container">
         <section class="card">
             <header>
-                <div class="badge">Node.js &amp; npm</div>
-                <h1>Comandos npm no VS Code</h1>
+                <div class="badge">Node.js, npm, Git &amp; HTML</div>
+                <h1>Guia de npm, Git e tags HTML</h1>
+                <p>Consulte descrições e exemplos, pesquise e copie o conteúdo para seus projetos.</p>
             </header>
+
+            <div class="toolbar">
+                <label class="search-box" for="command-search">
+                    <span class="search-icon" aria-hidden="true">⌕</span>
+                    <input id="command-search" type="search" placeholder="Buscar comando, tag ou descrição..."
+                        autocomplete="off">
+                </label>
+                <output class="command-count" id="command-count" aria-live="polite"></output>
+            </div>
+
+            <p class="empty-state" id="empty-state" hidden>Nenhum comando encontrado. Tente outro termo.</p>
 
             <section>
                 <h2>Instalação do npm</h2>
                 <p><strong>Para permitir a execução de scripts no PowerShell do VS Code:</strong></p>
-                <code class="command">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code>
+                <code
+                    class="command command-important">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code>
             </section>
 
             <section>
@@ -146,23 +583,362 @@
                 <code class="command">npm init</code>
 
                 <p><strong>Cria o projeto usando configuração padrão:</strong></p>
-                <code class="command">npm init -y</code>
+                <code class="command command-important">npm init -y</code>
             </section>
 
             <section>
                 <h2>Gerenciamento de pacotes</h2>
                 <ul>
-                    <li><strong>Instala dependências do projeto:</strong><br><code class="command">npm install</code></li>
+                    <li><strong>Instala dependências do projeto:</strong><br><code
+                            class="command command-important">npm install</code>
+                    </li>
                     <li><strong>Instala um pacote:</strong><br><code class="command">npm install pacote</code></li>
-                    <li><strong>Instala um pacote como dependência de desenvolvimento:</strong><br><code class="command">npm install -D pacote</code></li>
+                    <li><strong>Instala um pacote como dependência de desenvolvimento:</strong><br><code
+                            class="command">npm install -D pacote</code></li>
                     <li><strong>Remove um pacote:</strong><br><code class="command">npm uninstall pacote</code></li>
                     <li><strong>Lista os pacotes instalados:</strong><br><code class="command">npm list</code></li>
-                    <li><strong>Mostra os scripts disponíveis do projeto:</strong><br><code class="command">npm run</code></li>
-                    <li><strong>Executa um pacote temporário sem instalação global:</strong><br><code class="command">npx</code></li>
+                    <li><strong>Mostra os scripts disponíveis do projeto:</strong><br><code
+                            class="command">npm run</code></li>
+                    <li><strong>Executa um pacote temporário sem instalação global:</strong><br><code
+                            class="command">npx</code></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Scripts do projeto</h2>
+                <ul>
+                    <li><strong>Executa o script de inicialização, se definido no package.json:</strong><br><code
+                            class="command">npm start</code></li>
+                    <li><strong>Executa o script de desenvolvimento, se definido no package.json:</strong><br><code
+                            class="command">npm run dev</code></li>
+                    <li><strong>Executa os testes definidos no projeto:</strong><br><code
+                            class="command">npm test</code></li>
+                    <li><strong>Gera a versão de produção, se houver esse script:</strong><br><code
+                            class="command">npm run build</code></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Instalação e atualização</h2>
+                <ul>
+                    <li><strong>Instala exatamente as versões do package-lock.json:</strong><br><code
+                            class="command command-important">npm ci</code><br><small>Requer um arquivo
+                            package-lock.json ou npm-shrinkwrap.json.</small></li>
+                    <li><strong>Atualiza dependências dentro das versões permitidas no package.json:</strong><br><code
+                            class="command">npm update</code></li>
+                    <li><strong>Mostra dependências com versões mais recentes disponíveis:</strong><br><code
+                            class="command">npm outdated</code></li>
+                    <li><strong>Lista apenas as dependências diretas do projeto:</strong><br><code
+                            class="command">npm list --depth=0</code></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Auditoria e manutenção</h2>
+                <ul>
+                    <li><strong>Verifica vulnerabilidades conhecidas nas dependências:</strong><br><code
+                            class="command">npm audit</code></li>
+                    <li><strong>Tenta corrigir vulnerabilidades sem mudanças incompatíveis:</strong><br><code
+                            class="command command-important">npm audit fix</code><br><small>Pode atualizar o
+                            package-lock.json. Revise as alterações antes de enviar o projeto.</small></li>
+                    <li><strong>Verifica a integridade do cache local do npm:</strong><br><code
+                            class="command">npm cache verify</code></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Comandos Git</h2>
+                <p><small>Execute os comandos no terminal, dentro da pasta do projeto. Troque os valores de exemplo
+                        pelos seus dados.</small></p>
+                <ul>
+                    <li><strong>Confere se o Git está instalado:</strong><br><code class="command">git --version</code>
+                    </li>
+                    <li><strong>Configura seu nome para os commits:</strong><br><code
+                            class="command">git config --global user.name "Seu Nome"</code></li>
+                    <li><strong>Configura seu e-mail para os commits:</strong><br><code
+                            class="command">git config --global user.email "voce@exemplo.com"</code></li>
+                    <li><strong>Inicia um repositório Git na pasta atual:</strong><br><code
+                            class="command command-important">git init</code></li>
+                    <li><strong>Baixa uma cópia de um repositório remoto:</strong><br><code
+                            class="command">git clone URL_DO_REPOSITORIO</code><br><small>Substitua pelo endereço HTTPS
+                            ou SSH do repositório.</small></li>
+                    <li><strong>Mostra arquivos modificados e o estado do repositório:</strong><br><code
+                            class="command command-important">git status</code></li>
+                    <li><strong>Prepara um arquivo para o próximo commit:</strong><br><code
+                            class="command">git add nome-do-arquivo</code></li>
+                    <li><strong>Prepara todas as alterações da pasta:</strong><br><code class="command">git add .</code>
+                    </li>
+                    <li><strong>Registra as alterações preparadas:</strong><br><code
+                            class="command command-important">git commit -m "Descreva a alteracao"</code></li>
+                    <li><strong>Exibe o histórico resumido de commits:</strong><br><code
+                            class="command">git log --oneline</code></li>
+                    <li><strong>Mostra alterações ainda não preparadas para commit:</strong><br><code
+                            class="command">git diff</code></li>
+                    <li><strong>Mostra alterações já preparadas para commit:</strong><br><code
+                            class="command">git diff --staged</code></li>
+                    <li><strong>Lista as branches locais:</strong><br><code class="command">git branch</code></li>
+                    <li><strong>Cria uma branch e muda para ela:</strong><br><code
+                            class="command">git switch -c nome-da-branch</code></li>
+                    <li><strong>Muda para uma branch existente:</strong><br><code
+                            class="command">git switch nome-da-branch</code></li>
+                    <li><strong>Lista os repositórios remotos configurados:</strong><br><code
+                            class="command">git remote -v</code></li>
+                    <li><strong>Conecta o projeto a um repositório remoto:</strong><br><code
+                            class="command">git remote add origin URL_DO_REPOSITORIO</code><br><small>Use quando o
+                            projeto ainda não tem um remoto chamado origin.</small></li>
+                    <li><strong>Envia a branch atual e configura o upstream:</strong><br><code
+                            class="command command-important">git push -u origin main</code><br><small>Troque main pelo
+                            nome da sua branch, se necessário.</small></li>
+                    <li><strong>Envia novos commits para o remoto:</strong><br><code class="command">git push</code>
+                    </li>
+                    <li><strong>Baixa e integra alterações da branch remota:</strong><br><code
+                            class="command">git pull origin main</code><br><small>Confirme o nome da branch antes de
+                            executar.</small></li>
+                    <li><strong>Baixa informações do remoto sem integrar alterações:</strong><br><code
+                            class="command">git fetch</code></li>
+                    <li><strong>Guarda temporariamente alterações ainda não commitadas:</strong><br><code
+                            class="command">git stash</code></li>
+                    <li><strong>Restaura as alterações guardadas mais recentemente:</strong><br><code
+                            class="command">git stash pop</code></li>
+                    <li><strong>Descarta alterações locais de um arquivo:</strong><br><code
+                            class="command command-important">git restore nome-do-arquivo</code><br><small>Atenção:
+                            remove as alterações locais não commitadas desse arquivo.</small></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tags HTML: descrições e exemplos</h2>
+                <ul>
+                    <li><strong>&lt;a&gt;:</strong> link para outra página, arquivo ou seção.<br><code class="command">&lt;a href="https://exemplo.com"&gt;Visitar site&lt;/a&gt;</code></li>
+                    <li><strong>&lt;article&gt;:</strong> conteúdo independente, como uma notícia ou publicação.<br><code class="command">&lt;article&gt;&lt;h2&gt;Notícia&lt;/h2&gt;&lt;p&gt;Texto&lt;/p&gt;&lt;/article&gt;</code></li>
+                    <li><strong>&lt;aside&gt;:</strong> conteúdo complementar ao conteúdo principal.<br><code class="command">&lt;aside&gt;Leia também&lt;/aside&gt;</code></li>
+                    <li><strong>&lt;body&gt;:</strong> corpo da página, onde fica o conteúdo visível.<br><code class="command">&lt;body&gt;&lt;main&gt;Conteúdo&lt;/main&gt;&lt;/body&gt;</code></li>
+                    <li><strong>&lt;button&gt;:</strong> botão que pode ser acionado pelo usuário.<br><code class="command">&lt;button type="button"&gt;Salvar&lt;/button&gt;</code></li>
+                    <li><strong>&lt;code&gt;:</strong> trecho de código.<br><code class="command">&lt;code&gt;npm test&lt;/code&gt;</code></li>
+                    <li><strong>&lt;div&gt;:</strong> contêiner genérico para agrupar conteúdo.<br><code class="command">&lt;div class="grupo"&gt;Conteúdo&lt;/div&gt;</code></li>
+                    <li><strong>&lt;footer&gt;:</strong> rodapé de uma página ou seção.<br><code class="command">&lt;footer&gt;Fim da página&lt;/footer&gt;</code></li>
+                    <li><strong>&lt;form&gt;:</strong> formulário para envio de informações.<br><code class="command">&lt;form action="/enviar" method="post"&gt;Campos&lt;/form&gt;</code></li>
+                    <li><strong>&lt;h1&gt;:</strong> título principal de uma seção.<br><code class="command">&lt;h1&gt;Título principal&lt;/h1&gt;</code></li>
+                    <li><strong>&lt;h2&gt;:</strong> título de segundo nível.<br><code class="command">&lt;h2&gt;Uma seção&lt;/h2&gt;</code></li>
+                    <li><strong>&lt;h3&gt;:</strong> título de terceiro nível.<br><code class="command">&lt;h3&gt;Um tópico&lt;/h3&gt;</code></li>
+                    <li><strong>&lt;head&gt;:</strong> metadados e configurações do documento HTML.<br><code class="command">&lt;head&gt;&lt;title&gt;Minha página&lt;/title&gt;&lt;/head&gt;</code></li>
+                    <li><strong>&lt;header&gt;:</strong> cabeçalho de uma página ou seção.<br><code class="command">&lt;header&gt;&lt;h1&gt;Meu site&lt;/h1&gt;&lt;/header&gt;</code></li>
+                    <li><strong>&lt;html&gt;:</strong> elemento raiz de um documento HTML.<br><code class="command">&lt;html lang="pt-BR"&gt;&lt;body&gt;&lt;main&gt;Conteúdo do documento&lt;/main&gt;&lt;/body&gt;&lt;/html&gt;</code></li>
+                    <li><strong>&lt;img&gt;:</strong> imagem incorporada ao documento.<br><code class="command">&lt;img src="foto.jpg" alt="Descrição da foto"&gt;</code></li>
+                    <li><strong>&lt;input&gt;:</strong> campo de entrada de dados.<br><code class="command">&lt;input type="email" placeholder="Seu e-mail"&gt;</code></li>
+                    <li><strong>&lt;label&gt;:</strong> rótulo associado a um campo de formulário.<br><code class="command">&lt;label for="email"&gt;E-mail&lt;/label&gt;</code></li>
+                    <li><strong>&lt;li&gt;:</strong> item de uma lista.<br><code class="command">&lt;li&gt;Item da lista&lt;/li&gt;</code></li>
+                    <li><strong>&lt;link&gt;:</strong> referência a um recurso externo, geralmente uma folha de estilos.<br><code class="command">&lt;link rel="stylesheet" href="estilos.css"&gt;</code></li>
+                    <li><strong>&lt;main&gt;:</strong> conteúdo principal do documento.<br><code class="command">&lt;main&gt;Conteúdo principal&lt;/main&gt;</code></li>
+                    <li><strong>&lt;nav&gt;:</strong> grupo de links de navegação.<br><code class="command">&lt;nav&gt;&lt;a href="/"&gt;Início&lt;/a&gt;&lt;/nav&gt;</code></li>
+                    <li><strong>&lt;ol&gt;:</strong> lista ordenada.<br><code class="command">&lt;ol&gt;&lt;li&gt;Primeiro passo&lt;/li&gt;&lt;/ol&gt;</code></li>
+                    <li><strong>&lt;option&gt;:</strong> opção disponível em uma lista de seleção.<br><code class="command">&lt;option value="br"&gt;Brasil&lt;/option&gt;</code></li>
+                    <li><strong>&lt;p&gt;:</strong> parágrafo de texto.<br><code class="command">&lt;p&gt;Um parágrafo.&lt;/p&gt;</code></li>
+                    <li><strong>&lt;script&gt;:</strong> código JavaScript ou referência a um arquivo de script.<br><code class="command">&lt;script src="app.js"&gt;&lt;/script&gt;</code></li>
+                    <li><strong>&lt;section&gt;:</strong> seção temática do documento.<br><code class="command">&lt;section&gt;&lt;h2&gt;Sobre&lt;/h2&gt;&lt;p&gt;Texto&lt;/p&gt;&lt;/section&gt;</code></li>
+                    <li><strong>&lt;select&gt;:</strong> lista de opções selecionáveis.<br><code class="command">&lt;select&gt;&lt;option&gt;Brasil&lt;/option&gt;&lt;/select&gt;</code></li>
+                    <li><strong>&lt;small&gt;:</strong> texto complementar ou apresentado em tamanho menor.<br><code class="command">&lt;small&gt;Observação&lt;/small&gt;</code></li>
+                    <li><strong>&lt;span&gt;:</strong> contêiner genérico em linha.<br><code class="command">&lt;span class="destaque"&gt;Texto&lt;/span&gt;</code></li>
+                    <li><strong>&lt;strong&gt;:</strong> texto de grande importância, normalmente exibido em negrito.<br><code class="command">&lt;strong&gt;Importante&lt;/strong&gt;</code></li>
+                    <li><strong>&lt;style&gt;:</strong> regras CSS incorporadas ao documento.<br><code class="command">&lt;style&gt;p { color: blue; }&lt;/style&gt;</code></li>
+                    <li><strong>&lt;table&gt;:</strong> tabela de dados.<br><code class="command">&lt;table&gt;&lt;tr&gt;&lt;th&gt;Nome&lt;/th&gt;&lt;/tr&gt;&lt;/table&gt;</code></li>
+                    <li><strong>&lt;td&gt;:</strong> célula de dados de uma tabela.<br><code class="command">&lt;td&gt;Ana&lt;/td&gt;</code></li>
+                    <li><strong>&lt;textarea&gt;:</strong> campo de texto com várias linhas.<br><code class="command">&lt;textarea name="mensagem"&gt;&lt;/textarea&gt;</code></li>
+                    <li><strong>&lt;th&gt;:</strong> célula de cabeçalho de uma tabela.<br><code class="command">&lt;th scope="col"&gt;Nome&lt;/th&gt;</code></li>
+                    <li><strong>&lt;title&gt;:</strong> título do documento exibido na aba do navegador.<br><code class="command">&lt;title&gt;Minha página&lt;/title&gt;</code></li>
+                    <li><strong>&lt;tr&gt;:</strong> linha de uma tabela.<br><code class="command">&lt;tr&gt;&lt;td&gt;Ana&lt;/td&gt;&lt;/tr&gt;</code></li>
+                    <li><strong>&lt;ul&gt;:</strong> lista não ordenada.<br><code class="command">&lt;ul&gt;&lt;li&gt;Item&lt;/li&gt;&lt;/ul&gt;</code></li>
                 </ul>
             </section>
         </section>
     </main>
+    <div class="toast" id="copy-feedback" role="status" aria-live="polite"></div>
+
+    <script>
+        const searchInput = document.getElementById("command-search");
+        const commandCount = document.getElementById("command-count");
+        const emptyState = document.getElementById("empty-state");
+        const feedback = document.getElementById("copy-feedback");
+        const commands = Array.from(document.querySelectorAll(".command"));
+        let feedbackTimeout;
+
+        function normalize(value) {
+            return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
+        function showFeedback(message) {
+            feedback.textContent = message;
+            feedback.classList.add("is-visible");
+            clearTimeout(feedbackTimeout);
+            feedbackTimeout = setTimeout(() => feedback.classList.remove("is-visible"), 1800);
+        }
+
+        function fallbackCopy(text) {
+            const temporaryInput = document.createElement("textarea");
+            temporaryInput.value = text;
+            temporaryInput.setAttribute("readonly", "");
+            temporaryInput.style.position = "fixed";
+            temporaryInput.style.opacity = "0";
+            document.body.append(temporaryInput);
+            temporaryInput.select();
+            const copied = document.execCommand("copy");
+            temporaryInput.remove();
+            return copied;
+        }
+
+        async function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch {
+                    return fallbackCopy(text);
+                }
+            }
+            return fallbackCopy(text);
+        }
+
+        commands.forEach((command) => {
+            const previousElement = command.previousElementSibling;
+            const listItem = command.closest("li");
+            const section = command.closest(".card > section");
+            const heading = section?.querySelector("h2")?.textContent || "";
+            const description = listItem?.textContent || previousElement?.textContent || "";
+            command.dataset.searchText = normalize(`${command.textContent} ${description} ${heading}`);
+            command.dataset.description = normalize(description);
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "command-wrap";
+            if (command.classList.contains("command-important")) wrapper.classList.add("is-important");
+            command.before(wrapper);
+            wrapper.append(command);
+
+            const copyButton = document.createElement("button");
+            copyButton.className = "copy-button";
+            copyButton.type = "button";
+            copyButton.title = "Copiar conteúdo";
+            copyButton.setAttribute("aria-label", `Copiar: ${command.textContent.trim()}`);
+            copyButton.innerHTML = '<span class="copy-icon" aria-hidden="true">⧉</span><span class="copy-label">Copiar</span>';
+            copyButton.addEventListener("click", async () => {
+                const copied = await copyText(command.textContent.trim());
+                const label = copyButton.querySelector(".copy-label");
+                copyButton.classList.toggle("is-copied", copied);
+                label.textContent = copied ? "Copiado!" : "Falhou";
+                showFeedback(copied ? "Conteúdo copiado para a área de transferência." : "Não foi possível copiar o conteúdo.");
+                clearTimeout(copyButton.feedbackTimeout);
+                copyButton.feedbackTimeout = setTimeout(() => {
+                    label.textContent = "Copiar";
+                    copyButton.classList.remove("is-copied");
+                }, 1800);
+            });
+            wrapper.append(copyButton);
+        });
+
+        const tagSection = Array.from(document.querySelectorAll(".card > section"))
+            .find((section) => section.querySelector("h2")?.textContent.includes("Tags HTML"));
+        const tagsWithoutBodyPreview = {
+            head: "Define metadados e configurações do documento; esse conteúdo não aparece no corpo da página.",
+            link: "Carrega um recurso externo, como uma folha de estilos. O efeito depende do arquivo indicado em href.",
+            script: "Carrega JavaScript, que pode alterar a página. Scripts não são executados nesta prévia por segurança.",
+            title: "O texto aparece no título da aba do navegador, não no conteúdo da página."
+        };
+        const previewStyles = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:">
+            <style>
+                body { margin: 0; padding: 12px; color: #18212f; background: #fff; font: 14px/1.5 Arial, sans-serif; overflow-wrap: anywhere; }
+                h1, h2, h3 { margin: 0.15em 0; }
+                p { margin: 0.25em 0; }
+                table { border-collapse: collapse; }
+                th, td { padding: 3px 8px; border: 1px solid #8792a2; }
+                img { max-width: 100%; height: auto; }
+                input, textarea, select, button { font: inherit; }
+                a { color: #0969da; }
+            </style>`;
+
+        tagSection?.querySelectorAll("li").forEach((item) => {
+            const example = item.querySelector(".command");
+            const tag = item.querySelector("strong")?.textContent.match(/<([^>]+)>/)?.[1];
+            if (!example || !tag) return;
+
+            const preview = document.createElement("div");
+            preview.className = "tag-preview";
+            const label = document.createElement("span");
+            label.className = "tag-preview-label";
+            label.textContent = "Prévia na página";
+            preview.append(label);
+
+            if (tagsWithoutBodyPreview[tag]) {
+                const note = document.createElement("div");
+                note.className = "tag-preview-note";
+                note.textContent = tagsWithoutBodyPreview[tag];
+                preview.append(note);
+            } else {
+                const frame = document.createElement("iframe");
+                frame.className = "tag-preview-frame";
+                frame.title = `Prévia visual da tag ${tag}`;
+                frame.setAttribute("sandbox", "");
+                frame.tabIndex = -1;
+                frame.loading = "lazy";
+
+                const markup = example.textContent;
+                if (tag === "html") {
+                    frame.srcdoc = `<!doctype html>${markup}`;
+                } else if (tag === "body") {
+                    frame.srcdoc = `<!doctype html><html lang="pt-BR"><head>${previewStyles}</head>${markup}</html>`;
+                } else if (tag === "style") {
+                    frame.srcdoc = `<!doctype html><html lang="pt-BR"><head>${previewStyles}${markup}</head><body><p>Texto com estilo aplicado</p></body></html>`;
+                } else {
+                    frame.srcdoc = `<!doctype html><html lang="pt-BR"><head>${previewStyles}</head><body>${markup}</body></html>`;
+                }
+                preview.append(frame);
+            }
+
+            item.append(preview);
+        });
+
+        function filterCommands() {
+            const term = normalize(searchInput.value.trim());
+            const matches = commands.filter((command) => {
+                const match = command.dataset.searchText.includes(term);
+                command.closest(".command-wrap").hidden = !match;
+                return match;
+            });
+
+            document.querySelectorAll(".card li").forEach((item) => {
+                const itemCommands = Array.from(item.querySelectorAll(".command"));
+                item.hidden = term.length > 0 && !itemCommands.some((command) => !command.closest(".command-wrap").hidden);
+            });
+
+            document.querySelectorAll(".card > section").forEach((section) => {
+                const sectionCommands = Array.from(section.querySelectorAll(".command"));
+                const visibleCommands = sectionCommands.filter((command) => !command.closest(".command-wrap").hidden);
+                section.hidden = term.length > 0 && visibleCommands.length === 0;
+
+                section.querySelectorAll(":scope > p").forEach((paragraph) => {
+                    paragraph.hidden = term.length > 0 && !visibleCommands.some((command) =>
+                        command.dataset.description.includes(normalize(paragraph.textContent))
+                    );
+                });
+            });
+
+            commandCount.textContent = `${matches.length} ${matches.length === 1 ? "resultado" : "resultados"}`;
+            emptyState.hidden = term.length === 0 || matches.length > 0;
+        }
+
+        searchInput.addEventListener("input", filterCommands);
+        searchInput.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                searchInput.value = "";
+                filterCommands();
+            }
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
+                event.preventDefault();
+                searchInput.focus();
+            }
+        });
+        filterCommands();
+    </script>
 </body>
 
 </html>
